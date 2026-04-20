@@ -119,4 +119,4 @@ async def scope_submit(
     else:
         return templates.TemplateResponse(
             "scope_result.html", {"request": request, "results": result["results"]}
-      
+        )
