@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      # These should be overridden in production or via Render.
+      # Provide your direct download links here for the Excel sources.
+      BUDGET_SOURCE_URL: ${BUDGET_SOURCE_URL:-https://example.com/budget.xlsx}
+      SCOPE_SOURCE_URL: ${SCOPE_SOURCE_URL:-https://example.com/scope.xlsx}
+    restart: unless-stopped
