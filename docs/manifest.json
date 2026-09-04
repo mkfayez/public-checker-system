@@ -1,0 +1,16 @@
+{
+  "name": "Sarf — Offline Money Exchange",
+  "short_name": "Sarf",
+  "description": "Offline currency exchange between SAR, Syrian Lira (old/new) and USD.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0c10",
+  "theme_color": "#0b0c10",
+  "lang": "en",
+  "dir": "auto",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
