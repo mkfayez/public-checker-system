@@ -4,9 +4,12 @@
 const CURRENCIES = [
   { code: "USD",  flag: "$",    en: "US Dollar",            ar: "دولار أمريكي",        base: true,  def: 1 },
   { code: "SAR",  flag: "﷼",    en: "Saudi Riyal",          ar: "ريال سعودي",           def: 3.75 },
-  { code: "SYP",  flag: "ل.س",  en: "Syrian Lira (old)",    ar: "ليرة سورية (قديمة)",   def: 13000 },
-  { code: "SYPN", flag: "ل.س",  en: "Syrian Lira (new)",    ar: "ليرة سورية (جديدة)",   def: 130 },
+  { code: "SYP",  flag: "ل.س",  en: "Syrian Lira · old",    ar: "ليرة سورية · قديمة",   def: 13000 },
+  { code: "SYPN", flag: "ل.س",  en: "Syrian Lira · new",    ar: "ليرة سورية · جديدة",   def: 130 },
 ];
+
+// The new Syrian lira dropped two zeros: 1 new lira = 100 old lira.
+const SYP_REDENOM = 100;
 
 const I18N = {
   en: {
@@ -17,6 +20,7 @@ const I18N = {
     lastUpdated:"Last updated", footNote:"All conversions run locally · No data leaves your device",
     editRates:"Edit Rates", editNote:"Enter how many units of each currency equal <b>1 USD</b>.",
     reset:"Reset defaults", save:"Save", base:"base", perUsd:"per 1 USD", never:"not set yet",
+    redenomNote:"New lira = old ÷ 100 (2 zeros removed) — edit either, they stay linked.",
   },
   ar: {
     appName:"محوّل العملات", tagline:"يعمل بدون إنترنت", offlineReady:"جاهز بدون إنترنت",
@@ -26,6 +30,7 @@ const I18N = {
     lastUpdated:"آخر تحديث", footNote:"كل التحويلات تتم محليًا · لا تغادر بياناتك جهازك",
     editRates:"تعديل الأسعار", editNote:"أدخل كم وحدة من كل عملة تساوي <b>١ دولار</b>.",
     reset:"استعادة الافتراضي", save:"حفظ", base:"أساس", perUsd:"لكل ١ دولار", never:"غير محدد بعد",
+    redenomNote:"الليرة الجديدة = القديمة ÷ ١٠٠ (حُذف صفران) — عدّل أيًّا منهما ويبقيان مرتبطين.",
   },
 };
 
@@ -215,6 +220,19 @@ function openEdit(){
     row.appendChild(flag); row.appendChild(label); row.appendChild(input);
     list.appendChild(row);
   });
+
+  // Keep old/new Syrian lira locked at 100:1 (new = old ÷ 100).
+  const oldIn = list.querySelector('input[data-code="SYP"]');
+  const newIn = list.querySelector('input[data-code="SYPN"]');
+  if(oldIn && newIn){
+    const trim = n => String(Number(n.toFixed(6)));
+    oldIn.addEventListener("input",()=>{ const v=parseNum(oldIn.value); if(v>0) newIn.value=trim(v/SYP_REDENOM); });
+    newIn.addEventListener("input",()=>{ const v=parseNum(newIn.value); if(v>0) oldIn.value=trim(v*SYP_REDENOM); });
+  }
+  const note=document.createElement("p");
+  note.className="redenom-note"; note.textContent=t("redenomNote");
+  list.appendChild(note);
+
   $("#editBackdrop").hidden=false;
 }
 function saveEdit(){
@@ -223,6 +241,8 @@ function saveEdit(){
     if(v>0) state.rates[code]=v;
   });
   state.rates.USD=1;
+  // Enforce the redenomination invariant: 1 new lira = 100 old lira.
+  if(state.rates.SYP>0) state.rates.SYPN = state.rates.SYP / SYP_REDENOM;
   saveRates();
   $("#editBackdrop").hidden=true;
   renderRatesCard(); renderRate(); compute("from");

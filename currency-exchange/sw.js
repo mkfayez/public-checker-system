@@ -2,7 +2,7 @@
    Network-first for the app shell (HTML/JS/CSS/manifest) so fixes reach users
    as soon as they're online; falls back to cache when offline. Other assets
    (icons/fonts) are cache-first. Fully usable offline either way. */
-const CACHE = "money-converter-v4";
+const CACHE = "money-converter-v5";
 const ASSETS = [
   "./",
   "./index.html",
