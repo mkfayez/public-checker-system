@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0c10" />
+  <meta name="description" content="Offline money exchange between SAR, Syrian Lira (old/new) and USD. Works with no internet." />
+  <title>Sarf · Offline Money Exchange</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icons/icon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">◈</span>
+      <div class="brand-text">
+        <h1 data-i18n="appName">Sarf</h1>
+        <p class="tagline" data-i18n="tagline">Offline Money Exchange</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <span class="net-pill" id="netPill" title="Connection status">
+        <span class="dot"></span><span id="netLabel" data-i18n="offlineReady">Offline‑ready</span>
+      </span>
+      <button class="ghost-btn" id="langBtn" aria-label="Switch language">العربية</button>
+    </div>
+  </header>
+
+  <main class="stage">
+    <!-- Converter card -->
+    <section class="card converter" aria-labelledby="convTitle">
+      <div class="card-glow"></div>
+      <h2 class="card-title" id="convTitle" data-i18n="convert">Convert</h2>
+
+      <div class="field">
+        <label data-i18n="youSend">You have</label>
+        <div class="money-row">
+          <input id="amountFrom" class="money-input" inputmode="decimal" value="100" autocomplete="off" />
+          <button class="currency-pick" id="pickFrom" aria-haspopup="listbox">
+            <span class="cur-flag" id="fromFlag">$</span>
+            <span class="cur-code" id="fromCode">USD</span>
+            <span class="chev">▾</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="swap-wrap">
+        <button class="swap-btn" id="swapBtn" aria-label="Swap currencies">⇅</button>
+      </div>
+
+      <div class="field">
+        <label data-i18n="youGet">You get</label>
+        <div class="money-row result-row">
+          <input id="amountTo" class="money-input" inputmode="decimal" value="0" autocomplete="off" />
+          <button class="currency-pick" id="pickTo" aria-haspopup="listbox">
+            <span class="cur-flag" id="toFlag">ل.س</span>
+            <span class="cur-code" id="toCode">SYP</span>
+            <span class="chev">▾</span>
+          </button>
+        </div>
+      </div>
+
+      <p class="rate-line" id="rateLine">1 USD = …</p>
+
+      <div class="quick-chips" id="quickChips" aria-label="Quick amounts"></div>
+    </section>
+
+    <!-- Rates card -->
+    <section class="card rates" aria-labelledby="ratesTitle">
+      <div class="rates-head">
+        <h2 class="card-title" id="ratesTitle" data-i18n="rates">Exchange Rates</h2>
+        <button class="ghost-btn small" id="editRatesBtn" data-i18n="edit">Edit</button>
+      </div>
+      <p class="rates-sub" data-i18n="ratesSub">Rates are stored on your device. Set them to your market and they work with no internet.</p>
+      <div class="rate-grid" id="rateGrid"></div>
+      <p class="updated-line"><span data-i18n="lastUpdated">Last updated</span>: <span id="updatedAt">—</span></p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span data-i18n="footNote">All conversions run locally · No data leaves your device</span>
+  </footer>
+
+  <!-- Currency picker sheet -->
+  <div class="sheet-backdrop" id="sheetBackdrop" hidden>
+    <div class="sheet" role="listbox" id="currencySheet" aria-label="Select currency"></div>
+  </div>
+
+  <!-- Edit rates modal -->
+  <div class="sheet-backdrop" id="editBackdrop" hidden>
+    <div class="sheet edit-sheet">
+      <h3 class="sheet-title" data-i18n="editRates">Edit Rates</h3>
+      <p class="sheet-note" data-i18n="editNote">Enter how many units of each currency equal <b>1 USD</b>.</p>
+      <div id="editList" class="edit-list"></div>
+      <div class="edit-actions">
+        <button class="ghost-btn" id="resetRatesBtn" data-i18n="reset">Reset defaults</button>
+        <button class="primary-btn" id="saveRatesBtn" data-i18n="save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
