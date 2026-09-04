@@ -1,6 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
+  "rewrites": [
+    { "source": "/", "destination": "/currency-exchange/index.html" },
+    { "source": "/((?!currency-exchange/).*)", "destination": "/currency-exchange/$1" }
+  ],
   "headers": [
     {
       "source": "/sw.js",

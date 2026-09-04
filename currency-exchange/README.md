@@ -34,22 +34,24 @@ python3 -m http.server 5173
 # open http://localhost:5173
 ```
 
-## Deploy to Vercel
+## Deploy to Vercel (zero config)
 
-This app is a static site living in the `currency-exchange/` subfolder.
+The repo-root `vercel.json` serves this app at the site root via rewrites, so
+there is **nothing to configure** in Vercel:
 
-1. Import the repository into Vercel.
-2. In **Project Settings → Build & Development**, set:
-   - **Framework Preset:** Other
-   - **Root Directory:** `currency-exchange`
-   - Build command: *(leave empty)* · Output directory: *(leave empty)*
-3. Deploy. Your link will be live and the app will work offline after first load.
+1. Import the repository `mkfayez/public-checker-system` into Vercel.
+2. Leave every default as-is (Root Directory = repo root, no build command).
+3. Click **Deploy**. Your link goes live and the app opens at the root URL
+   (e.g. `https://your-project.vercel.app`), working offline after first load.
 
-Alternatively, from the `currency-exchange` folder:
+Or from the repo root via CLI:
 
 ```bash
 npx vercel --prod
 ```
+
+The app files stay tidy inside `currency-exchange/`; the root `vercel.json`
+rewrites every request to that folder.
 
 ## How conversion works
 
