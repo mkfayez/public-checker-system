@@ -1,6 +1,6 @@
 {
-  "name": "Sarf — Offline Money Exchange",
-  "short_name": "Sarf",
+  "name": "Money Converter — Offline",
+  "short_name": "Converter",
   "description": "Offline currency exchange between SAR, Syrian Lira (old/new) and USD.",
   "start_url": "./index.html",
   "scope": "./",

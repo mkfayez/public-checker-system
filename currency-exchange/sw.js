@@ -1,5 +1,5 @@
 /* Sarf service worker — cache-first so the app runs fully offline. */
-const CACHE = "sarf-v1";
+const CACHE = "money-converter-v2";
 const ASSETS = [
   "./",
   "./index.html",

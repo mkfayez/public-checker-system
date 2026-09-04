@@ -1,4 +1,4 @@
-# Sarf — Offline Money Exchange 💱
+# Money Converter — Offline 💱
 
 A luxury, **fully offline** currency exchange web app for:
 

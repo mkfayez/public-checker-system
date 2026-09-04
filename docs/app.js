@@ -10,7 +10,7 @@ const CURRENCIES = [
 
 const I18N = {
   en: {
-    appName:"Sarf", tagline:"Offline Money Exchange", offlineReady:"Offline‑ready",
+    appName:"Money Converter", tagline:"Works Offline", offlineReady:"Offline‑ready",
     convert:"Convert", youSend:"You have", youGet:"You get",
     rates:"Exchange Rates", edit:"Edit",
     ratesSub:"Rates are stored on your device. Set them to your market and they work with no internet.",
@@ -19,7 +19,7 @@ const I18N = {
     reset:"Reset defaults", save:"Save", base:"base", perUsd:"per 1 USD", never:"not set yet",
   },
   ar: {
-    appName:"صَرف", tagline:"صرافة تعمل بدون إنترنت", offlineReady:"جاهز بدون إنترنت",
+    appName:"محوّل العملات", tagline:"يعمل بدون إنترنت", offlineReady:"جاهز بدون إنترنت",
     convert:"تحويل", youSend:"لديك", youGet:"تحصل على",
     rates:"أسعار الصرف", edit:"تعديل",
     ratesSub:"الأسعار محفوظة على جهازك. اضبطها حسب سوقك وتعمل بدون أي إنترنت.",
