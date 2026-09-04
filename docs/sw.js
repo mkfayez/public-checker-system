@@ -1,5 +1,8 @@
-/* Sarf service worker — cache-first so the app runs fully offline. */
-const CACHE = "money-converter-v2";
+/* Money Converter service worker.
+   Network-first for the app shell (HTML/JS/CSS/manifest) so fixes reach users
+   as soon as they're online; falls back to cache when offline. Other assets
+   (icons/fonts) are cache-first. Fully usable offline either way. */
+const CACHE = "money-converter-v3";
 const ASSETS = [
   "./",
   "./index.html",
@@ -21,19 +24,39 @@ self.addEventListener("activate", (e) => {
   );
 });
 
+function isShell(url) {
+  return url.origin === self.location.origin &&
+    /(\/|\.html|\.js|\.css|\.json)$/.test(url.pathname);
+}
+
 self.addEventListener("fetch", (e) => {
   const req = e.request;
   if (req.method !== "GET") return;
-  e.respondWith(
-    caches.match(req).then((cached) => {
-      if (cached) return cached;
-      return fetch(req)
+  const url = new URL(req.url);
+
+  if (req.mode === "navigate" || isShell(url)) {
+    // Network-first: always try to get the freshest code when online.
+    e.respondWith(
+      fetch(req)
         .then((res) => {
           const copy = res.clone();
           caches.open(CACHE).then((c) => c.put(req, copy)).catch(() => {});
           return res;
         })
-        .catch(() => caches.match("./index.html"));
-    })
+        .catch(() => caches.match(req).then((c) => c || caches.match("./index.html")))
+    );
+    return;
+  }
+
+  // Cache-first for everything else (icons, fonts, images).
+  e.respondWith(
+    caches.match(req).then((cached) =>
+      cached ||
+      fetch(req).then((res) => {
+        const copy = res.clone();
+        caches.open(CACHE).then((c) => c.put(req, copy)).catch(() => {});
+        return res;
+      }).catch(() => cached)
+    )
   );
 });

@@ -160,6 +160,10 @@ function renderQuickChips(){
 function openPicker(side){
   state.activeSide=side;
   const sheet=$("#currencySheet"); sheet.innerHTML="";
+  const close=document.createElement("button");
+  close.className="sheet-close"; close.setAttribute("aria-label","Close");
+  close.textContent="✕"; close.onclick=()=>{ $("#sheetBackdrop").hidden=true; };
+  sheet.appendChild(close);
   const current = side==="from"?state.from:state.to;
   CURRENCIES.forEach(c=>{
     const b=document.createElement("button");
@@ -188,13 +192,27 @@ function loadSelection(){
 
 /* ---------- edit rates ---------- */
 function openEdit(){
-  const list=$("#editList"); list.innerHTML="";
+  const list=$("#editList");
+  while(list.firstChild) list.removeChild(list.firstChild);
   CURRENCIES.forEach(c=>{
-    const row=document.createElement("div"); row.className="edit-row"+(c.base?" base":"");
-    row.innerHTML=`<span class="er-flag">${c.flag}</span>
-      <div class="er-label"><b>${name(c.code)}</b><span>${c.code}</span></div>
-      <input type="text" inputmode="decimal" data-code="${c.code}"
-             value="${c.base?1:state.rates[c.code]}" ${c.base?"disabled":""}/>`;
+    const row=document.createElement("div");
+    row.className="edit-row"+(c.base?" base":"");
+
+    const flag=document.createElement("span");
+    flag.className="er-flag"; flag.textContent=c.flag;
+
+    const label=document.createElement("div"); label.className="er-label";
+    const nm=document.createElement("b"); nm.textContent=name(c.code);
+    const cd=document.createElement("span"); cd.textContent=c.code;
+    label.appendChild(nm); label.appendChild(cd);
+
+    const input=document.createElement("input");
+    input.type="text"; input.inputMode="decimal";
+    input.setAttribute("data-code", c.code);
+    input.value = c.base ? "1" : String(state.rates[c.code]);
+    if(c.base) input.disabled=true;
+
+    row.appendChild(flag); row.appendChild(label); row.appendChild(input);
     list.appendChild(row);
   });
   $("#editBackdrop").hidden=false;
@@ -242,6 +260,10 @@ function init(){
   $("#editRatesBtn").addEventListener("click",openEdit);
   $("#saveRatesBtn").addEventListener("click",saveEdit);
   $("#resetRatesBtn").addEventListener("click",resetRates);
+  $("#editClose").addEventListener("click",()=>{ $("#editBackdrop").hidden=true; });
+  document.addEventListener("keydown",e=>{
+    if(e.key==="Escape"){ $("#sheetBackdrop").hidden=true; $("#editBackdrop").hidden=true; }
+  });
   $("#langBtn").addEventListener("click",()=>{
     state.lang = state.lang==="ar"?"en":"ar";
     applyLang(); renderPickButtons(); renderRatesCard(); renderQuickChips(); compute("from"); updateNet();
